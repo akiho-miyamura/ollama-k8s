@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    runtime: ollama
+  labels:
+    runtime: ollama
+  name: ollama
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      runtime: ollama
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        runtime: ollama
+      labels:
+        runtime: ollama
+    spec:
+      containers:
+        - image: ollama/ollama
+          name: ollama
+          ports:
+            - containerPort: 11434
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /root/.ollama
+              name: ollama-vol
+      restartPolicy: Always
+      volumes:
+      - name: ollama-vol
+        hostPath: 
+          path: /home/amiyamura/Desktop/kind/ollama/ollama
+          type: Directory
