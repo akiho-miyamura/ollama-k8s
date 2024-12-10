@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    ui: open-webui
+  labels:
+    ui: open-webui
+  name: open-webui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ui: open-webui
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        ui: open-webui
+      labels:
+        ui: open-webui
+    spec:
+      containers:
+        - image: ghcr.io/open-webui/open-webui:main
+          name: open-webui
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /app/backend/data
+              name: open-webui
+      restartPolicy: Always
+      volumes:
+      - name: open-webui
+        persistentVolumeClaim:
+          claimName: open-webui
+
